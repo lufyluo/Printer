@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" WindowState="Maximized" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid>
-        <WebBrowser x:Name="WebBrowser" HorizontalAlignment="Left" Height="301" Margin="0" VerticalAlignment="Top" Width="509" Source="http://localhost/test.html" Navigated="Na_Navigated" />
+        <WebBrowser x:Name="WebBrowser" HorizontalAlignment="Left" Height="301" Margin="0" VerticalAlignment="Top" Width="509"  Navigated="Na_Navigated" />
 
     </Grid>
 </Window>

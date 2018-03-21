@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace Printer
         {
             this.WebBrowser.Width = this.ActualWidth;
             this.WebBrowser.Height = this.ActualHeight;
+            this.WebBrowser.Source = new Uri(ConfigurationSettings.AppSettings["Source"]);
+            this.WebBrowser.ObjectForScripting = new HandlerForScriptCalling();
         }
 
         private void Na_Navigated(object sender, NavigationEventArgs e)

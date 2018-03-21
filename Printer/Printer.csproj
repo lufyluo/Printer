@@ -63,13 +63,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HandlerForScriptCalling.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrinterCore.cs" />
+    <Compile Include="Print\ClsPrintLPT.cs" />
+    <Compile Include="Print\GetReceiptPrint.cs" />
+    <Compile Include="Print\PrinterBase.cs" />
+    <Compile Include="Print\ServicesOpenWaybillTotalPrint.cs" />
+    <Compile Include="Print\ServiceTickPrint.cs" />
+    <Compile Include="Print\TransportTickPrint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
