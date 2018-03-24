@@ -38,7 +38,7 @@ namespace Printer.Print
         /// <summary>
         /// 开始连接打印机
         /// </summary>
-        private bool PrintOpen()
+        public bool PrintOpen(string prnPort)
         {
             iHandle = CreateFile(prnPort, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
 
@@ -59,7 +59,7 @@ namespace Printer.Print
         /// 打印字符串
         /// </summary>
         /// <param name="str">要打印的字符串</param>
-        private void PrintLine(string str)
+        public void PrintLine(string str)
         {
             sw.WriteLine(str); ;
         }
@@ -78,11 +78,11 @@ namespace Printer.Print
         /// </summary>
         /// <param name="ds">tb_Temp 全部字段数据集合</param>
         /// <returns>true：打印成功 false：打印失败</returns>
-        public bool PrintDataSet(DataSet dsPrint)
+        public bool PrintDataSet(DataSet dsPrint,string prnPort)
         {
             try
             {
-                if (PrintOpen())
+                if (PrintOpen(prnPort))
                 {
                     PrintLine(" ");
                     PrintLine("[XXXXXXXXXXXXXXXXXX超市]");

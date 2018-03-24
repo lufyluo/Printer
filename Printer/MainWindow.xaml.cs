@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Printer.Print;
 
 namespace Printer
 {
@@ -21,6 +22,7 @@ namespace Printer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private PrinterConfig pcConfig = new PrinterConfig();
         public MainWindow()
         {
             InitializeComponent();
@@ -32,11 +34,23 @@ namespace Printer
             this.WebBrowser.Height = this.ActualHeight;
             this.WebBrowser.Source = new Uri(ConfigurationSettings.AppSettings["Source"]);
             this.WebBrowser.ObjectForScripting = new HandlerForScriptCalling();
+            this.Grid.Children.Add(pcConfig);
+            pcConfig.HorizontalAlignment = HorizontalAlignment.Center;
+            pcConfig.VerticalAlignment = VerticalAlignment.Center;
         }
 
         private void Na_Navigated(object sender, NavigationEventArgs e)
         {
 
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyStates == KeyStates.Down && e.Key == Key.P)
+            {
+                var c =this.Grid.Children;
+                this.Grid.Children.Remove(WebBrowser);
+            }
         }
     }
 }
