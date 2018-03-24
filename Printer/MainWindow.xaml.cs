@@ -22,7 +22,7 @@ namespace Printer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PrinterConfig pcConfig = new PrinterConfig();
+        public PrinterConfig pcConfig = new PrinterConfig();
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace Printer
             this.WebBrowser.Width = this.ActualWidth;
             this.WebBrowser.Height = this.ActualHeight;
             this.WebBrowser.Source = new Uri(ConfigurationSettings.AppSettings["Source"]);
-            this.WebBrowser.ObjectForScripting = new HandlerForScriptCalling();
+            this.WebBrowser.ObjectForScripting = new HandlerForScriptCalling(this);
             this.Grid.Children.Add(pcConfig);
             pcConfig.HorizontalAlignment = HorizontalAlignment.Center;
             pcConfig.VerticalAlignment = VerticalAlignment.Center;

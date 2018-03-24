@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Print\Externs.cs" />
     <Compile Include="SelectItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -78,7 +79,6 @@
     <Compile Include="PrinterConfig.xaml.cs">
       <DependentUpon>PrinterConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Print\ClsPrintLPT.cs" />
     <Compile Include="Print\GetReceiptPrint.cs" />
     <Compile Include="Print\PrinterBase.cs" />
     <Compile Include="Print\PrinterFinder.cs" />

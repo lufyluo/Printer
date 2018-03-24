@@ -36,11 +36,7 @@ namespace Printer
 
         private void PrintTest(string lp)
         {
-            ClsPrintLPT lpt = new ClsPrintLPT();
-            if (lpt.PrintOpen(lp))
-            {
-                lpt.PrintLine("hello");
-            }
+            new TransportTickPrint().Print();
         }
 
         private void name1_SelectionChanged(object sender, SelectionChangedEventArgs e)
