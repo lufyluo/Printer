@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Printer.Print
+namespace Printer.Framework.Printer
 {
     class Externs
     {
