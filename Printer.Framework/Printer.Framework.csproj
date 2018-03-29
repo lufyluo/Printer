@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="libUsbContorl">
+      <HintPath>.\libUsbContorl.dll</HintPath>
+    </Reference>
+    <Reference Include="libUsbContorlback">
+      <HintPath>.\libUsbContorlback.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -50,13 +56,19 @@
     <Compile Include="Printer\IPrinter.cs" />
     <Compile Include="Printer\Externs.cs" />
     <Compile Include="Printer\Finder.cs" />
+    <Compile Include="Printer\LoadPOSDll.cs" />
+    <Compile Include="Printer\Model\Ticket.cs" />
+    <Compile Include="Printer\Model\TicketFoot.cs" />
     <Compile Include="Printer\PrinterBase.cs" />
     <Compile Include="Printer\Model\SelectItem.cs" />
+    <Compile Include="Printer\PrinterCmdUtils.cs" />
     <Compile Include="Printer\QrPrinter\IQrPrinter.cs" />
     <Compile Include="Printer\QrPrinter\Model\QrPrintParam.cs" />
     <Compile Include="Printer\QrPrinter\PrinterQr.cs" />
+    <Compile Include="Printer\ReceiptPrinterESC\ReceiptHelper.cs" />
+    <Compile Include="Printer\ReceiptPrinterESC\Structs.cs" />
     <Compile Include="Printer\ServiceTickPrinter\Model\ServiceReceiptBound.cs" />
-    <Compile Include="Printer\ServiceTickPrinter\PrinterServiceTick.cs" />
+    <Compile Include="Printer\ServiceTickPrinter\ReceiptPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
