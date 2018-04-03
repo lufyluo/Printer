@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutoUpdater_LUFY"
         mc:Ignorable="d"
-        Title="MainWindow" Height="150" Width="525" Loaded="MainWindow_OnLoaded">
+        Title="AutoUpdate" Height="150" Width="525" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid>
         <ProgressBar Name="ProgressBar" HorizontalAlignment="Left" Value="0" Maximum="100" Margin="33,34,0,0" VerticalAlignment="Top" Width="450"/>
+        <Label Content="请稍候....." HorizontalAlignment="Left" Margin="250,74,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

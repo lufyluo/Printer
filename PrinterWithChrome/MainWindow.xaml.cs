@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using CefSharp;
 using CefSharp.Wpf;
 using Printer.Framework.Config;
-using Printer.Framework.Printer.QrPrinter;
 using Printer.Framework.Printer.ServiceTickPrinter;
+using Printer.Framework.VersionCheck;
 using PrinterWithChrome.Controls;
 
 namespace PrinterWithChrome
@@ -30,13 +20,18 @@ namespace PrinterWithChrome
         private PrinterConfig config;
         public MainWindow()
         {
-            InitializeComponent();
+            if (!Checker.IsNeedUpdate())
+                InitializeComponent();
+            else
+            {
+                OpenUpdatedExe();
+            }
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             InitControls();
-           
+
         }
 
         private void InitControls()
@@ -62,6 +57,21 @@ namespace PrinterWithChrome
             if (e.KeyStates == KeyStates.Down && e.Key == Key.P)
             {
                 config.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void OpenUpdatedExe()
+        {
+            try
+            {
+                Process openupdatedexe = new Process();
+                openupdatedexe.StartInfo.FileName = "AutoUpdater-LUFY.exe";
+                if(openupdatedexe.Start())
+                    this.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("打开更新后程序出错：" + ex.Message);
             }
         }
     }

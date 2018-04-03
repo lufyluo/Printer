@@ -43,11 +43,11 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                 SendData2USB("REFERENCE 0,0\r\n");
                 SendData2USB($"TEXT 35,15,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Goods}\"\r\n");
                 SendData2USB("TEXT 15,95,\"TSS24.BF2\",0,1,1,\"到站：\"\r\n");
-                SendData2USB($"TEXT 65,85,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Terminus}\"\r\n");
+                SendData2USB($"TEXT 70,85,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Terminus}\"\r\n");
                 SendData2USB("TEXT 15,165,\"TSS24.BF2\",0,1,1,\"收货：\"\r\n");
-                SendData2USB($"TEXT 65,155,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Reciever}\"\r\n");
+                SendData2USB($"TEXT 70,155,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Reciever}\"\r\n");
                 SendData2USB("TEXT 15,235,\"TSS24.BF2\",0,1,1,\"品名：\"\r\n");
-                SendData2USB($"TEXT 65,225,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Type}\"\r\n");
+                SendData2USB($"TEXT 70,225,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Type}\"\r\n");
                 SendData2USB($"TEXT 285,260,\"TSS24.BF2\",0,1,1,\"{qrReceipt.Company}\"\r\n");
                 SendData2USB($"QRCODE 255,100,L,6,A,0,\"{qrReceipt.Code}\"\r\n");
                 SendData2USB("PRINT 2,1\r\n");

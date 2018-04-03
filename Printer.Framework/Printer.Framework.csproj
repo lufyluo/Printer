@@ -43,6 +43,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -68,11 +69,6 @@
     <Compile Include="Printer\PrinterBase.cs" />
     <Compile Include="Printer\Model\SelectItem.cs" />
     <Compile Include="Printer\PrinterCmdUtils.cs" />
-    <Compile Include="Printer\QrPrinter\IQrPrinter.cs" />
-    <Compile Include="Printer\QrPrinter\Model\QrPrintParam.cs" />
-    <Compile Include="Printer\QrPrinter\PrinterQr.cs" />
-    <Compile Include="Printer\ReceiptPrinterESC\ReceiptHelper.cs" />
-    <Compile Include="Printer\ReceiptPrinterESC\Structs.cs" />
     <Compile Include="Printer\ServiceTickPrinter\LogisticsPrinter.cs" />
     <Compile Include="Printer\ServiceTickPrinter\Model\AciontResult.cs" />
     <Compile Include="Printer\ServiceTickPrinter\Model\LogisticsReceiptBound.cs" />
@@ -84,6 +80,9 @@
     <Compile Include="Printer\ServiceTickPrinter\TransportReceiptPrinter.cs" />
     <Compile Include="Printer\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VersionCheck\Checker.cs" />
+    <Compile Include="VersionCheck\Models\VersionResult.cs" />
+    <Compile Include="WebProxy\HttpHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

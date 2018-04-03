@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ICSharpCode.SharpZipLib.Zip;
+using Printer.Framework.Config;
 
 namespace AutoUpdater_LUFY
 {
@@ -28,23 +29,30 @@ namespace AutoUpdater_LUFY
     public partial class MainWindow : Window
     {
         //更新包地址  
-        private string url = "http://localhost/AnswerControl.zip";
+        private string url = "http://localhost:8088/a.zip";
         //文件名字  
         private string filename = "";
         //下载文件存放全路径  
         private string filepath = "";
         //更新后打开的程序名  
-        string startexe = nameof(TestConsole)+".exe";
+        string startexe = "PrinterWithChrome.exe";
         //新版本号  
         string version = "20180327002";
         private BackgroundWorker m_BackgroundWorker;// 申明后台对象
         public MainWindow()
         {
+            //url = ConfigManager.GetAppConfig("DownloadSite");
             InitializeComponent();
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                OpenUpdatedExe();
+                this.Close();
+                return;
+            }
             m_BackgroundWorker = new BackgroundWorker(); // 实例化后台对象
 
             m_BackgroundWorker.WorkerReportsProgress = true; // 设置可以通告进度
@@ -77,13 +85,11 @@ namespace AutoUpdater_LUFY
                     KillExeProcess();
                     SetprogressBar(5);
                     DownloadFile();
-                    SetprogressBar(25);
+                    SetprogressBar(35);
                     UnZipFile();
-                    SetprogressBar(10);
-                    UpdateVersionInfo();
-                    SetprogressBar(10);
+                    SetprogressBar(30);
                     OpenUpdatedExe();
-                    SetprogressBar(10);
+                    SetprogressBar(20);
                    
                 }
                 catch (Exception ex)
@@ -155,21 +161,7 @@ namespace AutoUpdater_LUFY
         }
 
 
-        private void UpdateVersionInfo()
-        {
-            try
-            {
-                Configuration cfa = ConfigurationManager.OpenExeConfiguration(startexe);
-                cfa.AppSettings.Settings["Version"].Value = version;
-                cfa.Save();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("更新版本信息出错：" + ex.Message);
-            }
-
-        }
-
+       
         /// <summary>  
         /// 打开更新后的程序  
         /// </summary>  
@@ -186,7 +178,8 @@ namespace AutoUpdater_LUFY
             }
             catch (Exception ex)
             {
-                throw new Exception("打开更新后程序出错：" + ex.Message);
+                //throw new Exception("打开更新后程序出错：" + ex.Message);
+                writeLog("打开更新后程序出错：" + ex.Message);
             }
         }
 
@@ -248,7 +241,7 @@ namespace AutoUpdater_LUFY
         {
             using (StreamWriter errorlog = new StreamWriter(System.IO.Path.Combine(Environment.CurrentDirectory, @"log.txt"), true))
             {
-                string strLog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + str + "/r/n";
+                string strLog = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "  " + str + "\r\n";
                 errorlog.Write(strLog);
                 errorlog.Flush();
                 //errorlog.Close();

@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>AutoUpdater_LUFY</RootNamespace>
     <AssemblyName>AutoUpdater-LUFY</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -99,9 +100,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TestConsole\TestConsole.csproj">
-      <Project>{f8b59d45-5fab-4ac4-92a1-1321c6bb4830}</Project>
-      <Name>TestConsole</Name>
+    <ProjectReference Include="..\Printer.Framework\Printer.Framework.csproj">
+      <Project>{c27cb28d-8e4f-4336-a6f9-8e7e0db8f71e}</Project>
+      <Name>Printer.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
