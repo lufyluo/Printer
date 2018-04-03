@@ -12,24 +12,44 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
         public DateTime Date { get; set; }
         public string Store { get; set; }
         public List<Order> Orders { get; set; }
-        public int Total {
-            get
-            {
-                if (Orders == null)
-                    return 0;
-                return Orders.Count;
-            }
-        }
         public string Way { get; set; }
     }
 
     public class Order
     {
         public string No { get; set; }
+
+        public string NoBytes => No.GetAdjustedString("    货物编号    ");
         public string Reciever { get; set; }
+        public string RecieverBytes=> Reciever.GetAdjustedString(" 收货人 ");
         public string RecieverPhone { get; set; }
-        public string Name { get; set; }
-        public int Count { get; set; }
-        public int PassCount { get; set; }
+        public string RecieverPhoneBytes => RecieverPhone.GetAdjustedString(" 收货人电话 ");
+        public string Type { get; set; }
+        public string TypeBytes => Type.GetAdjustedString("    货物编号    ");
+        /// <summary>
+        /// 提
+        /// </summary>
+        public int TakePay { get; set; }
+
+        public string TakePayBytes
+        {
+            get
+            {
+                var item = $"提:{TakePay}";
+                return item.GetAdjustedString(" 收货人 ");
+            }
+        }
+        /// <summary>
+        /// 代
+        /// </summary>
+        public int Collection { get; set; }
+        public string CollectionBytes
+        {
+            get
+            {
+                var item = $"代:{Collection}";
+                return item.GetAdjustedString(" 收货人电话 ");
+            }
+        }
     }
 }

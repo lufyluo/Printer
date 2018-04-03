@@ -22,7 +22,6 @@ namespace Printer.Framework.Printer
         public const byte CR = 13;    // 归位键
         public const byte FF = 12;    // 走纸控制（打印并回到标准模式（在页模式下） ）
         public const byte CAN = 24;    // 作废（页模式下取消打印数据 ）
-
         /**
          * 打印纸一行最大的字节
          */
@@ -383,6 +382,15 @@ namespace Printer.Framework.Printer
                 result[i] = by;
             }
             return result;
+        }
+        public static byte[] lineSpace(byte space)
+        {
+            return new byte[] { ESC, space };
+        }
+
+        public static byte[] reset()
+        {
+            return new byte[] {27, 64};
         }
     }
 }

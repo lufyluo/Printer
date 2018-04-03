@@ -46,8 +46,10 @@ namespace PrinterWithChrome
                 Address = ConfigManager.GetSetting("Source")
             };
             CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            wb.RegisterJsObject("bound", new ReceiptPrinter());
-            wb.RegisterJsObject("bound1", new PrinterQr());
+            wb.RegisterJsObject("transBound", new TransportReceiptPrinter());
+            wb.RegisterJsObject("receiptBound", new ReceiptPrinter());
+            wb.RegisterJsObject("logisticsBound", new LogisticsPrinter());
+            wb.RegisterJsObject("qrBound", new QrPrinter());
             WBGrid.Children.Add(wb);
             config = new PrinterConfig();
             config.Width = 400;
