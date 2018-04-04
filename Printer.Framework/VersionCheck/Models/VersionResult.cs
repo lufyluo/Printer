@@ -8,7 +8,7 @@ namespace Printer.Framework.VersionCheck.Models
 {
     public class VersionResult
     {
-        public string Url { get; set; }
-        public string Version { get; set; }
+        public string WIN_VERSION { get; set; }
+        public string WIN_VERSION_URL { get; set; }
     }
 }

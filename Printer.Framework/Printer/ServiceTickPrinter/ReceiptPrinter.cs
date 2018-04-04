@@ -28,21 +28,49 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             serviceReceipt = JsonConvert.DeserializeObject<ServiceReceiptBound>(value);
         }
         public string JsonServiceReceipt { get; set; }
-        public void print(string value)
+        public string print(string value)
         {
-            setServiceReceipt(value);
-            NewUsb.FindUSBPrinter();
-            var result = NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
-            SendData2USB(PrinterCmdUtils.reset());
-            for (int i = 0,p=1,l = serviceReceipt.Orders.Count; i < l; i+= pageMax,p++)
+            try
             {
-                PrintHead(p);
-                PrintTable(p);
-                SendData2USB("\r\n");
-                SendData2USB(PrinterCmdUtils.lineSpace(60));
-                LoadPOSDll.POS_FeedLines(2);
-                SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+                setServiceReceipt(value);
+                NewUsb.FindUSBPrinter();
+                var result = NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
+                if (result)
+                {
+                    SendData2USB(PrinterCmdUtils.reset());
+                    for (int i = 0, p = 1, l = serviceReceipt.Orders.Count; i < l; i += pageMax, p++)
+                    {
+                        PrintHead(p);
+                        PrintTable(p);
+                        SendData2USB("\r\n");
+                        SendData2USB(PrinterCmdUtils.lineSpace(60));
+                        LoadPOSDll.POS_FeedLines(2);
+                        SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+                    }
+                    NewUsb.CloseUSBPort();
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = true
+                    });
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "未发现配置的打印机！"
+                    });
+                }
             }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new AciontResult()
+                {
+                    Success = false,
+                    Desc = e.Message
+                });
+            }
+           
         }
 
         private void PrintHead(int page)
@@ -75,11 +103,12 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
 
         private void PrintTableBody(int page)
         {
-            var orders = serviceReceipt.Orders.Skip(page * pageMax).Take(pageMax).ToList();
+            var indexPage = page - 1;
+            var orders = serviceReceipt.Orders.Skip(indexPage * pageMax).Take(pageMax).ToList();
             for (int i = 0,l = orders.Count(); i < l; i++)
             {
                 var item = orders[i];
-                var index = page * pageMax + i + 1;
+                var index = indexPage * pageMax + i + 1;
                 SendData2USB($@"┃{index.GetIntFix()}┃{item.NoBytes}┃{item.RecieverBytes}┃{item.RecieverPhoneBytes}┃");
                 NextLine();
                 SendData2USB("┃  ┣━━━━━━━━╋━━━━╋━━━━━━┫");

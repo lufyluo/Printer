@@ -23,24 +23,52 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         {
             logisticsReceiptBound = JsonConvert.DeserializeObject<LogisticsReceiptBound>(value);
         }
-        public void print(string value)
+        public string print(string value)
         {
-            setLogisticsReceiptBound(value);
-            NewUsb.FindUSBPrinter();
-            NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
-            SendData2USB(PrinterCmdUtils.reset());
-            LoadPOSDll.POS_SetLineSpacing(130);
-            MainPrint("存根联");
-            SpecialState1();
-            SendData2USB(PrinterCmdUtils.reset());
-            SendData2USB(PrinterCmdUtils.nextLine(1));
-            LoadPOSDll.POS_SetLineSpacing(100);
-            MainPrint("客户联");
-            SpecialState2();
-            LoadPOSDll.POS_FeedLines(2);
-            SendData2USB(enddata);
-            SendData2USB(" \r\n");
-            SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+            try
+            {
+                setLogisticsReceiptBound(value);
+                NewUsb.FindUSBPrinter();
+                var result = NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
+                if (result)
+                {
+                    SendData2USB(PrinterCmdUtils.reset());
+                    LoadPOSDll.POS_SetLineSpacing(130);
+                    MainPrint("存根联");
+                    SpecialState1();
+                    SendData2USB(PrinterCmdUtils.reset());
+                    SendData2USB(PrinterCmdUtils.nextLine(1));
+                    LoadPOSDll.POS_SetLineSpacing(100);
+                    MainPrint("客户联");
+                    SpecialState2();
+                    LoadPOSDll.POS_FeedLines(2);
+                    SendData2USB(enddata);
+                    SendData2USB(" \r\n");
+                    SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+                    NewUsb.CloseUSBPort();
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = true
+                    });
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "未发现配置的打印机！"
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new AciontResult()
+                {
+                    Success = false,
+                    Desc = e.Message
+                });
+            }
+           
         }
 
         private void MainPrint(string type)

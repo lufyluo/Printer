@@ -29,23 +29,48 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             transportReceipt = JsonConvert.DeserializeObject<TransportReceiptBound>(value);
         }
 
-        public void print(string value)
+        public string print(string value)
         {
-            setTransportReceipt(value);
-            NewUsb.FindUSBPrinter();
-            NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
-            SendData2USB(PrinterCmdUtils.reset());
-            LoadPOSDll.POS_SetLineSpacing(130);
-            PrintTitle(transportReceipt.Title);
-            PrintBar(transportReceipt.BarCode);
-            //SendData2USB(transportReceipt.BarCode);
-            SendData2USB(PrinterCmdUtils.reset());
-            SendData2USB(PrinterCmdUtils.nextLine(1));
-            //SendData2USB(enddata);
-            PrintHead();
-            PrintBody();
-            LoadPOSDll.POS_FeedLines(2);
-            SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+            try
+            {
+                setTransportReceipt(value);
+                NewUsb.FindUSBPrinter();
+                var state = NewUsb.LinkUSB(int.Parse(ConfigManager.GetSetting(_printer)));
+                if (state)
+                {
+                    SendData2USB(PrinterCmdUtils.reset());
+                    LoadPOSDll.POS_SetLineSpacing(130);
+                    PrintTitle(transportReceipt.Title);
+                    PrintBar(transportReceipt.BarCode);
+                    //SendData2USB(transportReceipt.BarCode);
+                    SendData2USB(PrinterCmdUtils.reset());
+                    SendData2USB(PrinterCmdUtils.nextLine(1));
+                    //SendData2USB(enddata);
+                    PrintHead();
+                    PrintBody();
+                    LoadPOSDll.POS_FeedLines(2);
+                    SendData2USB(PrinterCmdUtils.feedPaperCutAll());
+                    NewUsb.CloseUSBPort();
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = true
+                    });
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "未发现配置的打印机！"
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
         private void PrintHead()
         {
@@ -64,15 +89,15 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB($"打印时间:{DateTime.Now.ToString("yyyy-MM-dd hh:mm")}");
             SendData2USB(enddata);
             PrintLine();
-           
+
         }
 
-      
+
 
         private void PrintBody()
         {
             var maxLengthString = $"托运时间:{transportReceipt.ConsignmentDate.ToString("yyyy-MM-dd")}";
-            PrintTitle($"收货:{transportReceipt.Reciever} {transportReceipt.RecieverPhone.ToString()}",false);
+            PrintTitle($"收货:{transportReceipt.Reciever} {transportReceipt.RecieverPhone.ToString()}", false);
             SendData2USB($"发货人:{transportReceipt.Sender.GetAdjustedString(maxLengthString)}");
             PrintTitleSp(2);
             SendData2USB($"电话:{transportReceipt.SenderPhone}");
@@ -86,12 +111,12 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             PrintTitleSp(4);
             SendData2USB($"接货费:{transportReceipt.RecieveFee}");
             SendData2USB(PrinterCmdUtils.nextLine(2));
-            SendData2USB($"保险费:{transportReceipt.SecureFee}(客户{(transportReceipt.IsProtected?"要":"不")}保价)");
+            SendData2USB($"保险费:{transportReceipt.SecureFee}(客户{(transportReceipt.IsProtected ? "要" : "不")}保价)");
             SendData2USB(PrinterCmdUtils.nextLine(2));
-            PrintTitle($"总费用:{transportReceipt.TotalFee}",false);
+            PrintTitle($"总费用:{transportReceipt.TotalFee}", false);
             SendData2USB($"大写:{transportReceipt.Money}(提付:{transportReceipt.TakePay})");
             SendData2USB(PrinterCmdUtils.nextLine(1));
-            PrintTitle($"代收款:{transportReceipt.Collection}",false);
+            PrintTitle($"代收款:{transportReceipt.Collection}", false);
             SendData2USB($"开票人:{transportReceipt.BillingStaff}");
             SendData2USB(PrinterCmdUtils.nextLine(1));
             SendData2USB($"验证码:{transportReceipt.VerificationCode}");
@@ -137,5 +162,5 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         }
     }
 
-    
+
 }
