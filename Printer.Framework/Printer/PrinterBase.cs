@@ -45,7 +45,7 @@ namespace Printer.Framework.Printer
             SendData2USB(_fontBold);
             SendData2USB(tile + "\r\n");
             SendData2USB(PrinterCmdUtils.reset());
-            SendData2USB(PrinterCmdUtils.nextLine(1));
+            //SendData2USB(PrinterCmdUtils.nextLine(1));
             if (isCenter) SendData2USB(enddata);
         }
         protected void PrintCommonTable(List<GoodsDetail> goodsList)
@@ -71,8 +71,8 @@ namespace Printer.Framework.Printer
         {
             byte barCodeLength = (byte)code.Length;
             SendData2USB(PrinterCmdUtils.alignCenter());
-            SendData2USB(new byte[] { 29, 104, 90 });//h
-            SendData2USB(new byte[] { 29, 119, 3 });//w
+            SendData2USB(new byte[] { 29, 104, 100 });//h
+            SendData2USB(new byte[] { 29, 119, (byte)3.5 });//w
             if (isNeedCodeShown)
                 SendData2USB(new byte[] { 29, 72, 50 });
             SendData2USB(new byte[] { 29, 107 });

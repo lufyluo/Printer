@@ -23,6 +23,20 @@ namespace Printer.Framework.Printer
             }
             return Decode(result);
         }
+        public static string GetAdjustedStringByCols(this string adjustString, int cols)
+        {
+            var adjustBytes = Encode(adjustString);
+            var result = new byte[cols];
+            if (adjustBytes.Length < cols)
+            {
+                CopyRange(result, adjustBytes);
+                for (int i = 0, l = cols - adjustBytes.Length; i < l; i++)
+                {
+                    result[i + adjustBytes.Length] = PrinterCmdUtils.SP;
+                }
+            }
+            return Decode(result);
+        }
         /// <summary>
         /// 指定占宽度
         /// </summary>

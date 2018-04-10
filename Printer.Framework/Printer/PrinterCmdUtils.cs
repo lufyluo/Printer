@@ -392,5 +392,14 @@ namespace Printer.Framework.Printer
         {
             return new byte[] {27, 64};
         }
+
+        public static byte[] setLineHeight(byte h)
+        {
+            return new byte[] { 27, 51, h };
+        }
+        public static byte[] resetLineHeight()
+        {
+            return new byte[] { 27, 50 };
+        }
     }
 }

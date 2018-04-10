@@ -106,24 +106,26 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         private void PrintBody()
         {
             var maxLengthString = $"托运时间:{logisticsReceiptBound.ConsignmentDate.ToString("yyyy-MM-dd")}";
-            PrintTitle($"收货:{logisticsReceiptBound.Reciever} {logisticsReceiptBound.RecieverPhone.ToString()}", false);
-            SendData2USB($"发货人:{logisticsReceiptBound.Sender.GetAdjustedString(maxLengthString)}");
-            PrintTitleSp(2);
+            PrintTitle($"收货:{logisticsReceiptBound.Reciever} {logisticsReceiptBound.RecieverPhone.ToString()} \r\n", false);
+            SendData2USB($"{("发货人:"+logisticsReceiptBound.Sender).GetAdjustedString(maxLengthString)}");
+            //PrintTitleSp(2);
             SendData2USB($"电话:{logisticsReceiptBound.SenderPhone}");
             SendData2USB(enddata);
             PrintCommonTable(logisticsReceiptBound.GoodsDetails);
             NextLine();
             PrintLine();
-            SendData2USB($"送货费:{logisticsReceiptBound.DeliveryFee}");
-            PrintTitleSp(4);
-            SendData2USB($"现付:{logisticsReceiptBound.Pay}");
-            PrintTitleSp(4);
-            SendData2USB($"回付:{logisticsReceiptBound.PayBack}");
-            SendData2USB(PrinterCmdUtils.nextLine(2));
-            SendData2USB($"开票备注:{logisticsReceiptBound.BillingStaffRemarks}");
-            SendData2USB(PrinterCmdUtils.nextLine(2));
-            PrintTitle($"提付:{logisticsReceiptBound.TakePay}", false);
-            PrintTitle($"代收款:{logisticsReceiptBound.Collection}",false);
+            SendData2USB($"送货费:{logisticsReceiptBound.DeliveryFee.ToString().GetAdjustedStringByCols(12)}");
+            //PrintTitleSp(12);
+            SendData2USB($"现付:{logisticsReceiptBound.Pay.ToString().GetAdjustedStringByCols(12)}");
+            //PrintTitleSp(12);
+            SendData2USB($"回付:{logisticsReceiptBound.PayBack} \r\n");
+            SendData2USB(PrinterCmdUtils.nextLine(1));
+            SendData2USB($"开票备注:{logisticsReceiptBound.BillingStaffRemarks} \r\n");
+            SendData2USB(PrinterCmdUtils.nextLine(1));
+            SendData2USB(PrinterCmdUtils.setLineHeight(25));
+            PrintTitle($"提付:{logisticsReceiptBound.TakePay} \r\n", false);
+            SendData2USB(PrinterCmdUtils.setLineHeight(25));
+            PrintTitle($"代收款:{logisticsReceiptBound.Collection} \r\n",false);
             PrintTitle($"到付应收:{logisticsReceiptBound.FinalPay}", false);
            
         }

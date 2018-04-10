@@ -74,19 +74,21 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         }
         private void PrintHead()
         {
+            
             var maxLengthString = $"托运时间:{transportReceipt.ConsignmentDate.ToString("yyyy-MM-dd")}";
             PrintTitle($"货号:{transportReceipt.Goods}");
-            SendData2USB($"发站:{transportReceipt.StartStation}".GetAdjustedString(maxLengthString));
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
+            SendData2USB($"发站:{transportReceipt.StartStation} ".GetAdjustedString(maxLengthString));
             PrintTitleSp(2);
-            SendData2USB($"电话:{transportReceipt.Mobile}");
+            SendData2USB($"电话:{transportReceipt.Mobile} \r\n");
             SendData2USB(enddata);
             SendData2USB($"到站:{transportReceipt.Terminus}".GetAdjustedString(maxLengthString));
             PrintTitleSp(2);
-            SendData2USB($"电话:{transportReceipt.TelPhone}");
+            SendData2USB($"电话:{transportReceipt.TelPhone} \r\n");
             SendData2USB(enddata);
             SendData2USB(maxLengthString);
             PrintTitleSp(2);
-            SendData2USB($"打印时间:{DateTime.Now.ToString("yyyy-MM-dd hh:mm")}");
+            SendData2USB($"打印时间:{DateTime.Now.ToString("yyyy-MM-dd hh:mm")} \r\n");
             SendData2USB(enddata);
             PrintLine();
 
@@ -97,7 +99,8 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         private void PrintBody()
         {
             var maxLengthString = $"托运时间:{transportReceipt.ConsignmentDate.ToString("yyyy-MM-dd")}";
-            PrintTitle($"收货:{transportReceipt.Reciever} {transportReceipt.RecieverPhone.ToString()}", false);
+            SendData2USB(PrinterCmdUtils.setLineHeight(25));
+            PrintTitle($"收货:{transportReceipt.Reciever} {transportReceipt.RecieverPhone.ToString()} \r\n", false);
             SendData2USB($"发货人:{transportReceipt.Sender.GetAdjustedString(maxLengthString)}");
             PrintTitleSp(2);
             SendData2USB($"电话:{transportReceipt.SenderPhone}");
@@ -105,6 +108,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             PrintCommonTable(transportReceipt.GoodsDetails);
             NextLine();
             PrintLine();
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
             SendData2USB($"运费:{transportReceipt.FreightFee}");
             PrintTitleSp(4);
             SendData2USB($"送货费:{transportReceipt.DeliveryFee}");
@@ -113,28 +117,33 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB(PrinterCmdUtils.nextLine(2));
             SendData2USB($"保险费:{transportReceipt.SecureFee}(客户{(transportReceipt.IsProtected ? "要" : "不")}保价)");
             SendData2USB(PrinterCmdUtils.nextLine(2));
-            PrintTitle($"总费用:{transportReceipt.TotalFee}", false);
-            SendData2USB($"大写:{transportReceipt.Money}(提付:{transportReceipt.TakePay})");
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
+            PrintTitle($"总费用:{transportReceipt.TotalFee} \r\n", false);
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
+            SendData2USB($"大写:{transportReceipt.Money}(提付:{transportReceipt.TakePay}) \r\n");
             SendData2USB(PrinterCmdUtils.nextLine(1));
-            PrintTitle($"代收款:{transportReceipt.Collection}", false);
-            SendData2USB($"开票人:{transportReceipt.BillingStaff}");
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
+            PrintTitle($"代收款:{transportReceipt.Collection} \r\n", false);
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
+            SendData2USB($"开票人:{transportReceipt.BillingStaff} \r\n");
             SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB($"验证码:{transportReceipt.VerificationCode}");
+            SendData2USB($"验证码:{transportReceipt.VerificationCode} \r\n");
             SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB($"开票人备注:{transportReceipt.BillingStaffRemarks}");
+            SendData2USB(PrinterCmdUtils.setLineHeight(24));
+            SendData2USB($"开票人备注:{transportReceipt.BillingStaffRemarks} \r\n");
             SendData2USB(PrinterCmdUtils.nextLine(1));
             PrintLine();
-            SendData2USB(PrinterCmdUtils.lineSpace(120));
+            SendData2USB(PrinterCmdUtils.setLineHeight(18));
             PrintTitle("特别说明:", false);
             SendData2USB(PrinterCmdUtils.nextLine(1));
             PrintSpecialState();
-            SendData2USB("托运人（托运委托人）签字:\r\n");
-            SendData2USB(PrinterCmdUtils.nextLine(3));
-            SendData2USB("请妥善保存你的运输单。\r\n");
-            SendData2USB($"客服电话:{transportReceipt.CustomerServicePhone}\r\n");
-            SendData2USB($"公司网址:{transportReceipt.CompanyWebSite}\r\n");
-            SendData2USB($"发站地址:{transportReceipt.StartStationAddr}\r\n");
-            SendData2USB($"到站地址:{transportReceipt.TerminusAddr}\r\n");
+            SendData2USB("托运人（托运委托人）签字: \r\n");
+            SendData2USB(PrinterCmdUtils.nextLine(2));
+            SendData2USB("请妥善保存你的运输单。 \r\n");
+            SendData2USB($"客服电话:{transportReceipt.CustomerServicePhone} \r\n");
+            SendData2USB($"公司网址:{transportReceipt.CompanyWebSite} \r\n");
+            SendData2USB($"发站地址:{transportReceipt.StartStationAddr} \r\n");
+            SendData2USB($"到站地址:{transportReceipt.TerminusAddr} \r\n");
         }
 
         private void PrintSpecialState()
@@ -147,7 +156,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB("在我公司的代收款业务的货物，除现金提货外，只尽代收、证实义务，不承担其它责任。\r\n");
             SendData2USB("服务时限:本单有效期1个月。\r\n");
             SendData2USB("托运人在充分阅读理解本运输单及门店《委托运输合同条款》内容基础上，取得本运输单，即使未签字，一样视为对本条款认可，且没有补充，自愿承担相应责任。\r\n");
-            SendData2USB(PrinterCmdUtils.nextLine(3));
+            SendData2USB(PrinterCmdUtils.nextLine(2));
         }
 
         private void PrintTitleSp()
