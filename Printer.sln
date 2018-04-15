@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Printer", "Printer\Printer.csproj", "{725D92A7-B1C7-4CF5-8560-0B2399378534}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrinterWithChrome", "PrinterWithChrome\PrinterWithChrome.csproj", "{A1A7BD19-09FF-49D0-88DE-AA519C9229CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yunlaila", "PrinterWithChrome\yunlaila.csproj", "{A1A7BD19-09FF-49D0-88DE-AA519C9229CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Printer.Framework", "Printer.Framework\Printer.Framework.csproj", "{C27CB28D-8E4F-4336-A6F9-8E7E0DB8F71E}"
 EndProject
