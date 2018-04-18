@@ -31,6 +31,11 @@ namespace PrinterWithChrome.Controls
 
         private void Load_Loaded(object sender, RoutedEventArgs e)
         {
+            InitSelections();
+        }
+
+        public void InitSelections()
+        {
             var printers = Finder.GetAllPrinters();
             this.StickPrinter.ItemsSource = printers;
             this.ReceiptPrinter.ItemsSource = printers;
@@ -52,11 +57,33 @@ namespace PrinterWithChrome.Controls
 
         private void Submit_OnClick(object sender, RoutedEventArgs e)
         {
-            ConfigManager.UpdateSetting(nameof(StickPrinter), StickPrinter.SelectedValue?.ToString() ?? "");
-            ConfigManager.UpdateSetting(nameof(ReceiptPrinter), ReceiptPrinter.SelectedValue?.ToString() ?? "");
+            var stickPrinterSelectedValue = StickPrinter.SelectedValue?.ToString() ?? "";
+            
+            ConfigManager.UpdateSetting(nameof(StickPrinter), stickPrinterSelectedValue);
+
+            var receiptPrinterSelectedValue = ReceiptPrinter.SelectedValue?.ToString() ?? "";
+
+            ConfigManager.UpdateSetting(nameof(ReceiptPrinter), receiptPrinterSelectedValue);
+
+            PrinterBase.SetPrinters();
+
+            var stickPrinterPath = GetPrinterUsbPath(stickPrinterSelectedValue);
+            ConfigManager.UpdateSetting(nameof(StickPrinter)+"Path", stickPrinterPath);
+
+            
+            var receiptPrinterPath = GetPrinterUsbPath(receiptPrinterSelectedValue);
+            ConfigManager.UpdateSetting(nameof(ReceiptPrinter) + "Path", receiptPrinterPath);
             this.Visibility = Visibility.Hidden;
         }
 
+        private string GetPrinterUsbPath(string port)
+        {
+            if (string.IsNullOrEmpty(port))
+            {
+                return "";
+            }
+            return PrinterBase.printerPaths[int.Parse(port)].Path;
+        }
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
             SetSelected(nameof(StickPrinter), StickPrinter);

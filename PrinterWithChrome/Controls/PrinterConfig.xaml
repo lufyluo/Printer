@@ -26,11 +26,11 @@
 
 
 
-        <Label   Grid.Row="0" Grid.Column="0"  Content="Stick"  HorizontalAlignment="Right"  VerticalAlignment="Center"/>
+        <Label   Grid.Row="0" Grid.Column="0"  Content="标签打印机"  HorizontalAlignment="Right"  VerticalAlignment="Center"/>
 
         <ComboBox x:Name="StickPrinter" Grid.Row="0" Grid.Column="1" DisplayMemberPath="Value" SelectedValuePath="Value" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="191"/>
 
-        <Label   Grid.Row="1" Grid.Column="0"  Content="Receipt"  HorizontalAlignment="Right"  VerticalAlignment="Center"/>
+        <Label   Grid.Row="1" Grid.Column="0"  Content="小票打印机"  HorizontalAlignment="Right"  VerticalAlignment="Center"/>
 
         <ComboBox x:Name="ReceiptPrinter" Grid.Row="1" Grid.Column="1" DisplayMemberPath="Value" SelectedValuePath="Value" HorizontalAlignment="Center"  VerticalAlignment="Center" Width="191"/>
 

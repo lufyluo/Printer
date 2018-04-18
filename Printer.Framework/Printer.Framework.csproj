@@ -64,6 +64,7 @@
     <Compile Include="Printer\Externs.cs" />
     <Compile Include="Printer\Finder.cs" />
     <Compile Include="Printer\LoadPOSDll.cs" />
+    <Compile Include="Printer\Model\PrinterConfig.cs" />
     <Compile Include="Printer\Model\Ticket.cs" />
     <Compile Include="Printer\Model\TicketFoot.cs" />
     <Compile Include="Printer\PrinterBase.cs" />

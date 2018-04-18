@@ -23,6 +23,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         {
             logisticsReceiptBound = JsonConvert.DeserializeObject<LogisticsReceiptBound>(value);
         }
+      
         public string print(string value)
         {
             try

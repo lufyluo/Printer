@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Printer.Framework.Config;
+using Printer.Framework.Printer.Model;
 using Printer.Framework.Printer.ServiceTickPrinter.Model;
 
 namespace Printer.Framework.Printer
 {
     public abstract class PrinterBase
     {
-        protected readonly libUsbContorl.UsbOperation NewUsb = new libUsbContorl.UsbOperation();
+        protected static readonly libUsbContorl.UsbOperation NewUsb = new libUsbContorl.UsbOperation();
+        public static List<PrinterConfig> printerPaths = new List<PrinterConfig>();
         protected readonly byte[] _shiftsize = { 0x1d, 0x57, 0xd0, 0x01 };//偏移量
         protected readonly byte[] _kanjiMode = { 0x1c, 0x26 };//汉字模式
         protected readonly byte[] _boldAndCenter = { 0x1b, 0x61, 0x01, 0x1b, 0x21, 0x30, 0x1c, 0x57, 0x01 };
@@ -67,7 +72,7 @@ namespace Printer.Framework.Printer
             SendData2USB("------------------------------------------------");
             NextLine();
         }
-        protected void PrintBar(string code, bool isNeedCodeShown=true)
+        protected void PrintBar(string code, bool isNeedCodeShown = true)
         {
             byte barCodeLength = (byte)code.Length;
             SendData2USB(PrinterCmdUtils.alignCenter());
@@ -98,5 +103,114 @@ namespace Printer.Framework.Printer
             }
         }
 
+        public static List<SelectItem> GetAllPrinters()
+        {
+            SetPrinters();
+            NewUsb.FindUSBPrinter();
+            List<SelectItem> names = new List<SelectItem>();
+            var index = 0;
+            foreach (string sPrint in NewUsb.mCurrentDevicePath)//获取所有打印机名称
+            {
+
+                var Item = new SelectItem()
+                {
+                    Value = index.ToString()
+                };
+                index++;
+                names.Add(Item);
+            }
+            NewUsb.CloseUSBPort();
+            return names;
+        }
+
+        public static void SetPrinters()
+        {
+            printerPaths.Clear();
+            NewUsb.FindUSBPrinter();
+            if (NewUsb.mCurrentDevicePath.Count <= 0)
+                return;
+            printerPaths.Add(GetPrinterConfigItem("StickPrinter", "Label", NewUsb.mCurrentDevicePath));
+            printerPaths.Add(GetPrinterConfigItem("ReceiptPrinter", "Receipt", NewUsb.mCurrentDevicePath));
+           
+            NewUsb.CloseUSBPort();
+        }
+
+        private static PrinterConfig GetPrinterConfigItem(string configKey, string tag, List<string> usbPaths)
+        {
+            var printerPort = ConfigManager.GetSetting(configKey);
+            if (!string.IsNullOrEmpty(printerPort))
+            {
+                int stickPort = int.Parse(printerPort);
+                if (usbPaths.Count - 1 >= stickPort)
+                {
+                    return new PrinterConfig()
+                    {
+                        Port = stickPort,
+                        Path = usbPaths[stickPort],
+                        Tag = tag
+                    };
+                }
+
+            }
+            return new PrinterConfig();
+        }
+
+        /// <summary>
+        /// js Interface
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        public string isPrinterOk(string tag)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(tag))
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "参数错误！"
+                    });
+                var key = tag == "Label" ? "StickPrinter" : "ReceiptPrinter";
+                var port = ConfigManager.GetSetting(key);
+                if (string.IsNullOrEmpty(port))
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "请检查打印机或按P设置有效打印机！"
+                    });
+                var usbPath = ConfigManager.GetSetting(key + "Path");
+                if (string.IsNullOrEmpty(usbPath))
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "请按P重新设置打印机！"
+                    });
+
+
+                SetPrinters();
+                var printConfig = printerPaths[int.Parse(port)];
+                if (printConfig == null)
+                    return JsonConvert.SerializeObject(new AciontResult()
+                    {
+                        Success = false,
+                        Desc = "请检查打印机或按P设置打印机！"
+                    });
+                var result = printConfig.Tag == tag && printConfig.Path == usbPath;
+                return JsonConvert.SerializeObject(new AciontResult()
+                {
+                    Success = result,
+                    Desc = result ? "状态正常" : "请检查打印机或按P设置有效打印机！"
+                });
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new AciontResult()
+                {
+                    Success = false,
+                    Desc = "请检查打印机或按P设置有效打印机！"
+                });
+            }
+            
+        }
     }
 }

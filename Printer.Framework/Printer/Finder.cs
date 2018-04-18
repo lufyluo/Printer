@@ -12,6 +12,11 @@ namespace Printer.Framework.Printer
     {
         public static List<SelectItem> GetAllPrinters()
         {
+            return PrinterBase.GetAllPrinters();
+        }
+
+        private static List<SelectItem> GetAllPrintersByPrintDocument()
+        {
             PrintDocument print = new PrintDocument();
             //string sDefault = print.PrinterSettings.PrinterName;//默认打印机名
             List<SelectItem> names = new List<SelectItem>();

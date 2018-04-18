@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
 using Printer.Framework.Config;
+using Printer.Framework.Printer;
 using Printer.Framework.Printer.ServiceTickPrinter;
 using Printer.Framework.VersionCheck;
 using PrinterWithChrome.Controls;
@@ -21,7 +22,9 @@ namespace PrinterWithChrome
         public MainWindow()
         {
             if (!Checker.IsNeedUpdate())
+            {
                 InitializeComponent();
+            }
             else
             {
                 OpenUpdatedExe();
@@ -31,7 +34,6 @@ namespace PrinterWithChrome
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             InitControls();
-
         }
 
         private void InitControls()
@@ -56,6 +58,7 @@ namespace PrinterWithChrome
         {
             if (e.KeyStates == KeyStates.Down && e.Key == Key.P)
             {
+                config.InitSelections();
                 config.Visibility = Visibility.Visible;
             }
         }
