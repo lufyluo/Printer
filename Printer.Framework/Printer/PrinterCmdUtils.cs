@@ -401,5 +401,13 @@ namespace Printer.Framework.Printer
         {
             return new byte[] { 27, 50 };
         }
+        public static byte[] setBold(byte n)
+        {
+            return new byte[] { 27, 69, n };
+        }
+        public static byte[] printNextLine(byte n)
+        {
+            return new byte[] { 27,100, n };
+        }
     }
 }

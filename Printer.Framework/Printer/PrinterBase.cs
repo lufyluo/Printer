@@ -74,15 +74,15 @@ namespace Printer.Framework.Printer
         }
         protected void PrintBar(string code, bool isNeedCodeShown = true)
         {
-            byte barCodeLength = (byte)code.Length;
+            byte barCodeLength = (byte)(code.Length+2);
             SendData2USB(PrinterCmdUtils.alignCenter());
             SendData2USB(new byte[] { 29, 104, 100 });//h
             SendData2USB(new byte[] { 29, 119, (byte)3.5 });//w
             if (isNeedCodeShown)
                 SendData2USB(new byte[] { 29, 72, 50 });
             SendData2USB(new byte[] { 29, 107 });
-            SendData2USB(new byte[] { 73, barCodeLength, 123, 67 });
-            SendData2USB("\r\n");
+            SendData2USB(new byte[] { 73, barCodeLength, 123, 66 } );
+            SendData2USB(code);
         }
         protected void PrintTitleSp(int n)
         {
@@ -109,12 +109,18 @@ namespace Printer.Framework.Printer
             NewUsb.FindUSBPrinter();
             List<SelectItem> names = new List<SelectItem>();
             var index = 0;
+            names.Add(new SelectItem()
+            {
+                Id = -1,
+                Value = "无"
+            });
             foreach (string sPrint in NewUsb.mCurrentDevicePath)//获取所有打印机名称
             {
 
                 var Item = new SelectItem()
                 {
-                    Value = index.ToString()
+                    Id = index,
+                    Value = sPrint
                 };
                 index++;
                 names.Add(Item);
@@ -129,30 +135,29 @@ namespace Printer.Framework.Printer
             NewUsb.FindUSBPrinter();
             if (NewUsb.mCurrentDevicePath.Count <= 0)
                 return;
-            printerPaths.Add(GetPrinterConfigItem("StickPrinter", "Label", NewUsb.mCurrentDevicePath));
-            printerPaths.Add(GetPrinterConfigItem("ReceiptPrinter", "Receipt", NewUsb.mCurrentDevicePath));
+            GetPrinterConfigItem("StickPrinter", "Label", NewUsb.mCurrentDevicePath, printerPaths);
+            GetPrinterConfigItem("ReceiptPrinter", "Receipt", NewUsb.mCurrentDevicePath, printerPaths);
            
             NewUsb.CloseUSBPort();
         }
 
-        private static PrinterConfig GetPrinterConfigItem(string configKey, string tag, List<string> usbPaths)
+        private static void GetPrinterConfigItem(string configKey, string tag, List<string> usbPaths,List<PrinterConfig> printers)
         {
             var printerPort = ConfigManager.GetSetting(configKey);
-            if (!string.IsNullOrEmpty(printerPort))
+            if (!string.IsNullOrEmpty(printerPort)&& printerPort!="-1")
             {
-                int stickPort = int.Parse(printerPort);
-                if (usbPaths.Count - 1 >= stickPort)
+                int port = int.Parse(printerPort);
+                if (usbPaths.Count - 1 >= port)
                 {
-                    return new PrinterConfig()
+                    printers.Add( new PrinterConfig()
                     {
-                        Port = stickPort,
-                        Path = usbPaths[stickPort],
+                        Port = port,
+                        Path = usbPaths[port],
                         Tag = tag
-                    };
+                    });
                 }
 
             }
-            return new PrinterConfig();
         }
 
         /// <summary>
@@ -188,14 +193,14 @@ namespace Printer.Framework.Printer
 
 
                 SetPrinters();
-                var printConfig = printerPaths[int.Parse(port)];
+                var printConfig = printerPaths.FirstOrDefault(n=>n.Tag==tag&&n.Port==int.Parse(port));
                 if (printConfig == null)
                     return JsonConvert.SerializeObject(new AciontResult()
                     {
                         Success = false,
                         Desc = "请检查打印机或按P设置打印机！"
                     });
-                var result = printConfig.Tag == tag && printConfig.Path == usbPath;
+                var result = printConfig.Path == usbPath;
                 return JsonConvert.SerializeObject(new AciontResult()
                 {
                     Success = result,

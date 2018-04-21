@@ -23,7 +23,7 @@ namespace PrinterWithChrome.Controls
     /// </summary>
     public partial class PrinterConfig : UserControl
     {
-        public string Name1Select { get; set; }
+        private List<SelectItem> printers = new List<SelectItem>();
         public PrinterConfig()
         {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace PrinterWithChrome.Controls
 
         public void InitSelections()
         {
-            var printers = Finder.GetAllPrinters();
+            printers = Finder.GetAllPrinters();
             this.StickPrinter.ItemsSource = printers;
             this.ReceiptPrinter.ItemsSource = printers;
             SetSelected(nameof(StickPrinter), StickPrinter);
@@ -45,10 +45,11 @@ namespace PrinterWithChrome.Controls
 
         private void SetSelected(string key, ComboBox cb)
         {
+            cb.SelectedIndex = 0;
             foreach (var combox in cb.Items)
             {
                 var selector = combox as SelectItem;
-                if (selector?.Value == ConfigManager.GetSetting(key))
+                if (selector?.Id.ToString() == ConfigManager.GetSetting(key)&& selector.Value == ConfigManager.GetSetting(key+"Path"))
                 {
                     cb.SelectedItem = combox;
                 }
@@ -57,11 +58,11 @@ namespace PrinterWithChrome.Controls
 
         private void Submit_OnClick(object sender, RoutedEventArgs e)
         {
-            var stickPrinterSelectedValue = StickPrinter.SelectedValue?.ToString() ?? "";
+            var stickPrinterSelectedValue = GetSelectedValue(StickPrinter.SelectedValue?.ToString() ?? "");
             
             ConfigManager.UpdateSetting(nameof(StickPrinter), stickPrinterSelectedValue);
 
-            var receiptPrinterSelectedValue = ReceiptPrinter.SelectedValue?.ToString() ?? "";
+            var receiptPrinterSelectedValue = GetSelectedValue(ReceiptPrinter.SelectedValue?.ToString() ?? "");
 
             ConfigManager.UpdateSetting(nameof(ReceiptPrinter), receiptPrinterSelectedValue);
 
@@ -76,9 +77,15 @@ namespace PrinterWithChrome.Controls
             this.Visibility = Visibility.Hidden;
         }
 
+        private string GetSelectedValue(string path)
+        {
+            var printerConfig = printers.FirstOrDefault(n => n.Value == path);
+            return printerConfig?.Id.ToString() ?? "1";
+        }
+
         private string GetPrinterUsbPath(string port)
         {
-            if (string.IsNullOrEmpty(port))
+            if (string.IsNullOrEmpty(port)|| port=="-1")
             {
                 return "";
             }
