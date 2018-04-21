@@ -111,27 +111,27 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                 var index = indexPage * pageMax + i + 1;
                 SendData2USB($@"┃{index.GetIntFix()}┃{item.NoBytes}┃{item.RecieverBytes}┃{item.RecieverPhoneBytes}┃");
                 NextLine();
-                SendData2USB("┃  ┣━━━━━━━━╋━━━━╋━━━━━━┫");
+                SendData2USB("┃  ┣━━━━━━━╋━━━━━╋━━━━━━┫");
                 NextLine();
                 SendData2USB($"┃  ┃{item.TypeBytes}┃{item.TakePayBytes}┃{item.CollectionBytes}┃");
                 NextLine();
                 if (i == (l - 1))
                 {
-                    SendData2USB("┗━┻━━━━━━━━┻━━━━┻━━━━━━┛");
+                    SendData2USB("┗━┻━━━━━━━┻━━━━━┻━━━━━━┛");
                     break;
                 }
-                SendData2USB("┣━╋━━━━━━━━╋━━━━╋━━━━━━┫");
+                SendData2USB("┣━╋━━━━━━━╋━━━━━╋━━━━━━┫");
 
             }
         }
 
         private void PrintTableHead()
         {
-            SendData2USB("┏━┳━━━━━━━━┳━━━━┳━━━━━━┓");
+            SendData2USB("┏━┳━━━━━━━┳━━━━━┳━━━━━━┓");
             NextLine();
-            SendData2USB("┃序┃    货物编号    ┃ 收货人 ┃ 收货人电话 ┃");
+            SendData2USB("┃序┃   货物编号   ┃  收货人  ┃ 收货人电话 ┃");
             NextLine();
-            SendData2USB("┣━╋━━━━━━━━╋━━━━╋━━━━━━┫");
+            SendData2USB("┣━╋━━━━━━━╋━━━━━╋━━━━━━┫");
             NextLine();
 
         }

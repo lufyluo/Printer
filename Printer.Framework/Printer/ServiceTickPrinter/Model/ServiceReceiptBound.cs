@@ -19,13 +19,13 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
     {
         public string No { get; set; }
 
-        public string NoBytes => No.GetAdjustedString("    货物编号    ");
+        public string NoBytes => No.GetAdjustedString("   货物编号   ");
         public string Reciever { get; set; }
-        public string RecieverBytes=> Reciever.GetAdjustedString(" 收货人 ");
+        public string RecieverBytes=> Reciever.GetAdjustedString("  收货人  ");
         public string RecieverPhone { get; set; }
         public string RecieverPhoneBytes => RecieverPhone.GetAdjustedString(" 收货人电话 ");
         public string Type { get; set; }
-        public string TypeBytes => Type.GetAdjustedString("    货物编号    ");
+        public string TypeBytes => Type.GetAdjustedString("   货物编号   ");
         /// <summary>
         /// 提
         /// </summary>
@@ -36,13 +36,13 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
             get
             {
                 var item = $"提:{TakePay}";
-                return item.GetAdjustedString(" 收货人 ");
+                return item.GetAdjustedString("  收货人  ");
             }
         }
         /// <summary>
         /// 代
         /// </summary>
-        public int Collection { get; set; }
+        public string Collection { get; set; }
         public string CollectionBytes
         {
             get

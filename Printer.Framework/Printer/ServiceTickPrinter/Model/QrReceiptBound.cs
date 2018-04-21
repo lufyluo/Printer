@@ -15,6 +15,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
         public string Company { get; set; }
         public string Code { get; set; }
         public Guid TempFileName { get; set; }
+        public int Times { get; set; }
 
         public QrReceiptBound()
         {
