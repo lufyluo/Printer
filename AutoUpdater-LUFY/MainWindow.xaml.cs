@@ -29,7 +29,7 @@ namespace AutoUpdater_LUFY
     public partial class MainWindow : Window
     {
         //更新包地址  
-        private string url = "http://localhost:8088/a.zip";
+        private string url = "";
         //文件名字  
         private string filename = "";
         //下载文件存放全路径  
@@ -41,7 +41,7 @@ namespace AutoUpdater_LUFY
         private BackgroundWorker m_BackgroundWorker;// 申明后台对象
         public MainWindow()
         {
-            //url = ConfigManager.GetAppConfig("DownloadSite");
+            url = ConfigManager.GetAppConfig("DownloadSite");
             InitializeComponent();
         }
 
@@ -208,23 +208,30 @@ namespace AutoUpdater_LUFY
 
                         if (zipfilename != String.Empty)
                         {
-                            using (FileStream streamWriter = File.Create(theEntry.Name))
+                            try
                             {
-                                int size = 2048;
-                                byte[] data = new byte[2048];
-                                while (true)
+                                using (FileStream streamWriter = File.Create(theEntry.Name))
                                 {
-                                    size = zis.Read(data, 0, data.Length);
-                                    if (size > 0)
+                                    int size = 2048;
+                                    byte[] data = new byte[2048];
+                                    while (true)
                                     {
-                                        streamWriter.Write(data, 0, size);
-                                    }
-                                    else
-                                    {
-                                        break;
+                                        size = zis.Read(data, 0, data.Length);
+                                        if (size > 0)
+                                        {
+                                            streamWriter.Write(data, 0, size);
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                             }
+                            catch (Exception e)
+                            {
+                            }
+                            
                         }
                     }
                 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PrinterWithChrome"
         mc:Ignorable="d"
-        Title="yulaila" Height="350" Width="525" Loaded="MainWindow_OnLoaded" WindowState="Maximized" KeyDown="Window_KeyDown">
+        Title="托运邦企业版" Height="350" Width="525" Loaded="MainWindow_OnLoaded" WindowState="Maximized" KeyDown="Window_KeyDown">
     <Grid Name="WBGrid">
         
     </Grid>

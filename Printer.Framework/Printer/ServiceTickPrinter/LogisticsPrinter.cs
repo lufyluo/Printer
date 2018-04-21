@@ -34,7 +34,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                 if (result)
                 {
                     SendData2USB(PrinterCmdUtils.reset());
-                    LoadPOSDll.POS_SetLineSpacing(130);
+                    LoadPOSDll.POS_SetLineSpacing(100);
                     MainPrint("存根联");
                     SpecialState1();
                     SendData2USB(PrinterCmdUtils.reset());
@@ -74,11 +74,13 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
 
         private void MainPrint(string type)
         {
-            PrintTitle(logisticsReceiptBound.Title+$"({type})");
-            PrintBar(logisticsReceiptBound.BarCode,false);
-            //SendData2USB(logisticsReceiptBound.BarCode);
             SendData2USB(PrinterCmdUtils.reset());
-            SendData2USB(PrinterCmdUtils.nextLine(1));
+            PrintTitle(logisticsReceiptBound.Title+$"签收单({type})");
+            SendData2USB(PrinterCmdUtils.setLineHeight(20));
+            SendData2USB(PrinterCmdUtils.printNextLine(1));
+            PrintBar(logisticsReceiptBound.BarCode,false);
+            SendData2USB(PrinterCmdUtils.setLineHeight(20));
+            SendData2USB(PrinterCmdUtils.printNextLine(1));
             //SendData2USB(enddata);
             PrintHead();
             PrintBody();
@@ -87,20 +89,30 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         private void PrintHead()
         {
             var maxLengthString = $"托运时间:{logisticsReceiptBound.ConsignmentDate.ToString("yyyy-MM-dd")}";
-            PrintTitle($"{logisticsReceiptBound.Goods}");
+            var exceptLent = $"托运{logisticsReceiptBound.ConsignmentDate.ToString("yyyy-MM-dd")}";
+            PrintTitle($"{logisticsReceiptBound.Terminus}:{logisticsReceiptBound.Goods}");
+            SendData2USB(PrinterCmdUtils.setLineHeight(20));
+            SendData2USB(PrinterCmdUtils.printNextLine(1));
+            SendData2USB(PrinterCmdUtils.resetLineHeight());
             SendData2USB($"发站:{logisticsReceiptBound.StartStation}".GetAdjustedString(maxLengthString));
             PrintTitleSp(2);
             SendData2USB($"电话:{logisticsReceiptBound.Mobile}");
             SendData2USB(enddata);
-            SendData2USB($"到站:{logisticsReceiptBound.Terminus}".GetAdjustedString(maxLengthString));
+            SendData2USB($"到站:");
+            SendData2USB(PrinterCmdUtils.setBold(1));
+            SendData2USB($"{logisticsReceiptBound.Terminus}".GetAdjustedString(exceptLent));
+            SendData2USB(PrinterCmdUtils.setBold(0));
             PrintTitleSp(2);
-            SendData2USB($"电话:{logisticsReceiptBound.TelPhone}");
-            SendData2USB(enddata);
+            SendData2USB($"电话:");
+            SendData2USB(PrinterCmdUtils.setBold(1));
+            SendData2USB($"{logisticsReceiptBound.TelPhone}" + " \r\n");
+            SendData2USB(PrinterCmdUtils.setBold(0));
+            //SendData2USB(enddata);
             SendData2USB(maxLengthString);
             PrintTitleSp(2);
-            SendData2USB($"开单时间:{DateTime.Now.ToString("yyyy-MM-dd hh:mm")}");
+            SendData2USB($"开单时间:{logisticsReceiptBound.OperateTime}");
             SendData2USB(enddata);
-            SendData2USB($"打印时间:{logisticsReceiptBound.PrintDate.ToString("yyyy-MM-dd hh:mm")}");
+            SendData2USB($"打印时间:{logisticsReceiptBound.PrintDate}");
             SendData2USB(enddata);
             PrintLine();
         }
@@ -152,16 +164,19 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         private void SpecialState2()
         {
             PrintLine();
+            SendData2USB(PrinterCmdUtils.setBold(1));
             SendData2USB("特别声明:");
+            SendData2USB(PrinterCmdUtils.setBold(0));
             SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB("1.本公司无审核所托运货物价值的能力和义务，赔偿标准亦以托运人支付的运费作为赔偿依据，未保价货物，货损最高按部分运费的5倍理赔，丢失最高按部分运费的10倍理赔(多件以平均丢失最高按部分运费的10倍理赔)");
 
-            SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB("2.凡在我公司托运有代收款业务的货物，请收贷方及时提货，公司仅免费保存3天，7天后将原货返回成都");
-            SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB("3.服务范围:本公司成都收货门店起至到站地卸货门止");
-            SendData2USB(PrinterCmdUtils.nextLine(1));
-            SendData2USB("服务期限:本单有效期1个月");
+            var strArr = logisticsReceiptBound.RenderImportant_info(logisticsReceiptBound.StatementList);
+            if (strArr.Length > 0)
+            {
+                foreach (var str in strArr)
+                {
+                    SendData2USB(str + " \r\n");
+                }
+            }
         }
         private void PrintCutTipLine()
         {

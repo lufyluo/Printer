@@ -25,7 +25,8 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
         /// 托运时间
         /// </summary>
         public DateTime ConsignmentDate { get; set; }
-        public DateTime PrintDate { get; set; }
+        public string OperateTime { get; set; }
+        public string PrintDate { get; set; }
         public string Reciever { get; set; }
         public string RecieverPhone { get; set; }
         public string Sender { get; set; }
@@ -48,7 +49,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
         /// </summary>
         public double SecureFee { get; set; }
         public bool IsProtected { get; set; }
-        public double TotalFee => FreightFee + DeliveryFee + RecieveFee + SecureFee;
+        public double TotalFee => TakePay;
         /// <summary>
         /// 提付
         /// </summary>
@@ -77,15 +78,16 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
 
         public bool IsNeedShowFreightFeeEtc { get; set; }
 
-        public string[] RenderImportant_info()
+        public string[] RenderImportant_info(string info)
         {
-            if (string.IsNullOrEmpty(ImportantInfo))
+            if (string.IsNullOrEmpty(info))
             {
                 return new string[] { };
             }
-            ImportantInfo.Replace("<br>","");
-            return ImportantInfo.Split(new string[] { "<br>" }, StringSplitOptions.None);
+            info.Replace("<br>","");
+            return info.Split(new string[] { "<br>" }, StringSplitOptions.None);
         }
+        public string PrintTime { get; set; }
     }
 
     public class GoodsDetail

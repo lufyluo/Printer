@@ -46,12 +46,13 @@ namespace Printer.Framework.Printer
             {
                 SendData2USB(PrinterCmdUtils.alignCenter());
             }
-
+            SendData2USB(PrinterCmdUtils.setBold(1));
             SendData2USB(_fontBold);
-            SendData2USB(tile + "\r\n");
+            SendData2USB(tile);
+            SendData2USB(PrinterCmdUtils.printNextLine(1));
             SendData2USB(PrinterCmdUtils.reset());
             //SendData2USB(PrinterCmdUtils.nextLine(1));
-            if (isCenter) SendData2USB(enddata);
+            //if (isCenter) SendData2USB(enddata);
         }
         protected void PrintCommonTable(List<GoodsDetail> goodsList)
         {
@@ -77,7 +78,7 @@ namespace Printer.Framework.Printer
             byte barCodeLength = (byte)(code.Length+2);
             SendData2USB(PrinterCmdUtils.alignCenter());
             SendData2USB(new byte[] { 29, 104, 100 });//h
-            SendData2USB(new byte[] { 29, 119, (byte)3.5 });//w
+            SendData2USB(new byte[] { 29, 119, 2});//w
             if (isNeedCodeShown)
                 SendData2USB(new byte[] { 29, 72, 50 });
             SendData2USB(new byte[] { 29, 107 });
@@ -96,10 +97,13 @@ namespace Printer.Framework.Printer
 
         private void PrintCommonTableBody(List<GoodsDetail> goodsList)
         {
+            var len = goodsList.Count;
+            var index = 0;
             foreach (var item in goodsList)
             {
                 SendData2USB("┣━━━━━━━━━━╋━━━━━╋━━╋━━┫");
-                SendData2USB($@"┃{item.TypeBytes}┃{item.PackageBytes}┃{item.CountBytes}┃{item.TotalBytes}┃");
+                var total = index == 0 ? item.TotalBytes : "";
+                SendData2USB($@"┃{item.TypeBytes}┃{item.PackageBytes}┃{item.CountBytes}┃{total}┃");
             }
         }
 

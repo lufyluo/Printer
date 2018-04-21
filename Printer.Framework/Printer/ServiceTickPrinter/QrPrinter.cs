@@ -50,8 +50,8 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                     SendData2USB($"TEXT 70,155,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Reciever}\"\r\n");
                     SendData2USB("TEXT 15,235,\"TSS24.BF2\",0,1,1,\"品名：\"\r\n");
                     SendData2USB($"TEXT 70,225,\"TSS24.BF2\",0,2,2,\"{qrReceipt.Type}\"\r\n");
-                    SendData2USB($"TEXT 285,260,\"TSS24.BF2\",0,1,1,\"{qrReceipt.Company}\"\r\n");
-                    SendData2USB($"QRCODE 255,100,L,6,A,0,\"{qrReceipt.Code}\"\r\n");
+                    SendData2USB($"TEXT 275,265,\"TSS24.BF2\",0,1,1,\"{qrReceipt.Company}\"\r\n");
+                    SendData2USB($"QRCODE 255,85,L,6,A,0,\"{qrReceipt.Code}\"\r\n");
                     SendData2USB($"PRINT {qrReceipt.Times},1\r\n");
                     SendData2USB("ADJUST\r\n");
                     SendData2USB("GOTO START\r\n");

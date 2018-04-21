@@ -41,13 +41,17 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                     SendData2USB(PrinterCmdUtils.reset());
                     LoadPOSDll.POS_SetLineSpacing(100);
                     PrintTitle(transportReceipt.Title);
+                    SendData2USB(PrinterCmdUtils.setLineHeight(20));
+                    SendData2USB(PrinterCmdUtils.printNextLine(1));
                     PrintBar(transportReceipt.BarCode,false);
+                    SendData2USB(PrinterCmdUtils.setLineHeight(20));
+                    SendData2USB(PrinterCmdUtils.printNextLine(1));
                     SendData2USB(PrinterCmdUtils.setBold(1));
                     SendData2USB(PrinterCmdUtils.alignCenter());
                     SendData2USB(transportReceipt.BarCode.ToString() +" \r\n");
                     SendData2USB(PrinterCmdUtils.reset());
-                    //SendData2USB(PrinterCmdUtils.nextLine(1));
-                    //SendData2USB(enddata);
+                    SendData2USB(PrinterCmdUtils.setLineHeight(20));
+                    SendData2USB(PrinterCmdUtils.printNextLine(1));
                     PrintHead();
                     PrintBody();
                     SendData2USB(PrinterCmdUtils.printNextLine(3));
@@ -79,7 +83,9 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
 
             var maxLengthString = $"托运时间:{transportReceipt.ConsignmentDate.ToString("yyyy-MM-dd")}";
             var exceptLent = $"托运{transportReceipt.ConsignmentDate.ToString("yyyy-MM-dd")}";
-            PrintTitle($"货号:{transportReceipt.Goods}");
+            PrintTitle($"{transportReceipt.Terminus}:{transportReceipt.Goods}");
+            SendData2USB(PrinterCmdUtils.setLineHeight(20));
+            SendData2USB(PrinterCmdUtils.printNextLine(1));
             SendData2USB(PrinterCmdUtils.setLineHeight(18));
             SendData2USB($"发站:{transportReceipt.StartStation} ".GetAdjustedString(maxLengthString));
             PrintTitleSp(2);
@@ -97,7 +103,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB(enddata);
             SendData2USB(maxLengthString);
             PrintTitleSp(2);
-            SendData2USB($"打印时间:{DateTime.Now.ToString("yyyy-MM-dd hh:mm")} \r\n");
+            SendData2USB($"打印时间:{transportReceipt.PrintDate} \r\n");
             SendData2USB(enddata);
             PrintLine();
 
@@ -120,10 +126,8 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB(PrinterCmdUtils.setLineHeight(18));
             if (transportReceipt.IsNeedShowFreightFeeEtc)
             {
-                SendData2USB($"运费:{transportReceipt.FreightFee + transportReceipt.RebateFee}");
-                PrintTitleSp(4);
-                SendData2USB($"送货费:{transportReceipt.DeliveryFee}");
-                PrintTitleSp(4);
+                SendData2USB($"运费:{(transportReceipt.FreightFee + transportReceipt.RebateFee).ToString().GetAdjustedStringByCols(12)}");
+                SendData2USB($"送货费:{transportReceipt.DeliveryFee.ToString().GetAdjustedStringByCols(12)}");
                 SendData2USB($"接货费:{transportReceipt.RecieveFee}");
             }
 
@@ -145,7 +149,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             SendData2USB(PrinterCmdUtils.setLineHeight(18));
             if (transportReceipt.Collection != "0")
             {
-                PrintTitle($"打款账户:{transportReceipt.ShipperBankName} \r\n", false);
+                SendData2USB($"打款账户:{transportReceipt.ShipperBankName}/{transportReceipt.ShipperBankCardAccount} \r\n");
                 SendData2USB(PrinterCmdUtils.setLineHeight(18));
             }
             SendData2USB($"开票人:{transportReceipt.BillingStaff} \r\n");
@@ -160,6 +164,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
             PrintTitle("特别说明:", false);
             SendData2USB(PrinterCmdUtils.nextLine(1));
             PrintSpecialState();
+            SendData2USB(PrinterCmdUtils.nextLine(1));
             SendData2USB("托运人（托运委托人）签字: \r\n");
             SendData2USB(PrinterCmdUtils.nextLine(2));
             SendData2USB("请妥善保存你的运输单。 \r\n");
@@ -171,7 +176,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
 
         private void PrintSpecialState()
         {
-            var strArr = transportReceipt.RenderImportant_info();
+            var strArr = transportReceipt.RenderImportant_info(transportReceipt.ImportantInfo);
             if (strArr.Length > 0)
             {
                 foreach (var str in strArr)

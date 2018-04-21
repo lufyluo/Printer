@@ -14,5 +14,6 @@ namespace Printer.Framework.Printer.ServiceTickPrinter.Model
         /// 到付应收
         /// </summary>
         public double FinalPay { get; set; }
+        public string StatementList { get; set; }
     }
 }

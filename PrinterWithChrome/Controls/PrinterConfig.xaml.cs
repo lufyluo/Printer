@@ -89,7 +89,10 @@ namespace PrinterWithChrome.Controls
             {
                 return "";
             }
-            return PrinterBase.printerPaths[int.Parse(port)].Path;
+            var index = int.Parse(port) >= PrinterBase.printerPaths.Count
+                ? PrinterBase.printerPaths.Count - 1
+                : int.Parse(port);
+            return PrinterBase.printerPaths[index].Path;
         }
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {

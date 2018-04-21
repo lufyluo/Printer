@@ -15,9 +15,9 @@ namespace Printer.Framework.VersionCheck
     public class Checker
     {
         public static ServerConfig _config;
-        public object lockObj = new object();
+        public static object lockObj = new object();
 
-        public ServerConfig GetServerConfig()
+        public static ServerConfig GetServerConfig()
         {
             if (_config == null)
             {
@@ -38,14 +38,14 @@ namespace Printer.Framework.VersionCheck
             try
             {
                 var currentVersion = ConfigManager.GetSetting("Version");
-                var checkService = ConfigManager.GetSetting("VersionCheckService");
-                var url = HttpHelper.GetResult($"{_config.server_addr}{checkService}{currentVersion}");
+                var serverAddr = ConfigManager.GetAppConfig("ConfigFileAddress");
+                var url = HttpHelper.GetResult(serverAddr);
                 var version = JsonConvert.DeserializeObject<VersionResult>(url);
                 ConfigManager.UpdateSetting("DownloadSite", version.WIN_VERSION_URL);
                 ConfigManager.UpdateSetting("Version", version.WIN_VERSION);
-                if (string.IsNullOrEmpty(version.WIN_VERSION_URL))
+                if (!string.IsNullOrEmpty(version.WIN_VERSION_URL))
                 {
-                    return version.WIN_VERSION == currentVersion;
+                    return version.WIN_VERSION != currentVersion;
                 }
                 return true;
             }
