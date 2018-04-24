@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace yulaila.Properties {
+namespace yunlaila.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

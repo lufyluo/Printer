@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ConfigManager.cs" />
+    <Compile Include="Log\Logger.cs" />
     <Compile Include="Printer\IPrinter.cs" />
     <Compile Include="Printer\Externs.cs" />
     <Compile Include="Printer\Finder.cs" />

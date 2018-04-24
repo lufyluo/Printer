@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
 using Printer.Framework.Config;
+using Printer.Framework.Log;
 using Printer.Framework.Printer;
 using Printer.Framework.Printer.ServiceTickPrinter;
 using Printer.Framework.VersionCheck;
@@ -21,14 +22,24 @@ namespace PrinterWithChrome
         private PrinterConfig config;
         public MainWindow()
         {
-            if (!Checker.IsNeedUpdate())
+            try
             {
-                InitializeComponent();
+                Logger.Info("start");
+                if (!Checker.IsNeedUpdate())
+                {
+                    InitializeComponent();
+                }
+                else
+                {
+                    OpenUpdatedExe();
+                }
+                Logger.Info("end");
             }
-            else
+            catch (Exception e)
             {
-                OpenUpdatedExe();
+                Logger.Info(e.Message);
             }
+           
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -38,21 +49,29 @@ namespace PrinterWithChrome
 
         private void InitControls()
         {
-            wb = new ChromiumWebBrowser
+            try
             {
-                Address = ConfigManager.GetSetting("Source")
-            };
-            CefSharpSettings.LegacyJavascriptBindingEnabled = true;
-            wb.RegisterJsObject("transBound", new TransportReceiptPrinter());
-            wb.RegisterJsObject("receiptBound", new ReceiptPrinter());
-            wb.RegisterJsObject("logisticsBound", new LogisticsPrinter());
-            wb.RegisterJsObject("qrBound", new QrPrinter());
-            WBGrid.Children.Add(wb);
-            config = new PrinterConfig();
-            config.Width = 400;
-            config.Height = 300;
-            WBGrid.Children.Add(config);
-            config.Visibility = Visibility.Hidden;
+                wb = new ChromiumWebBrowser
+                {
+                    Address = ConfigManager.GetSetting("Source")
+                };
+                CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+                wb.RegisterJsObject("transBound", new TransportReceiptPrinter());
+                wb.RegisterJsObject("receiptBound", new ReceiptPrinter());
+                wb.RegisterJsObject("logisticsBound", new LogisticsPrinter());
+                wb.RegisterJsObject("qrBound", new QrPrinter());
+                WBGrid.Children.Add(wb);
+                config = new PrinterConfig();
+                config.Width = 400;
+                config.Height = 300;
+                WBGrid.Children.Add(config);
+                config.Visibility = Visibility.Hidden;
+            }
+            catch (Exception e)
+            {
+                Logger.Info(e.Message);
+            }
+            
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
