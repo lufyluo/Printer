@@ -39,7 +39,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                 if (state)
                 {
                     SendData2USB(PrinterCmdUtils.reset());
-                    LoadPOSDll.POS_SetLineSpacing(100);
+                    SendData2USB(PrinterCmdUtils.printNextLine(1));
                     PrintTitle(transportReceipt.Title);
                     SendData2USB(PrinterCmdUtils.setLineHeight(20));
                     SendData2USB(PrinterCmdUtils.printNextLine(1));

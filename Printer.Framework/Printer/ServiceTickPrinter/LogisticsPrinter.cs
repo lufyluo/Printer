@@ -34,15 +34,16 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                 if (result)
                 {
                     SendData2USB(PrinterCmdUtils.reset());
-                    LoadPOSDll.POS_SetLineSpacing(100);
+                    SendData2USB(PrinterCmdUtils.printNextLine(1));
+                    //LoadPOSDll.POS_SetLineSpacing(100);
                     MainPrint("存根联");
                     SpecialState1();
                     SendData2USB(PrinterCmdUtils.reset());
                     SendData2USB(PrinterCmdUtils.nextLine(1));
-                    LoadPOSDll.POS_SetLineSpacing(100);
+                    SendData2USB(PrinterCmdUtils.printNextLine(2));
                     MainPrint("客户联");
                     SpecialState2();
-                    LoadPOSDll.POS_FeedLines(2);
+                    SendData2USB(PrinterCmdUtils.printNextLine(2));
                     SendData2USB(enddata);
                     SendData2USB(" \r\n");
                     SendData2USB(PrinterCmdUtils.feedPaperCutAll());
@@ -146,7 +147,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
         private void SpecialState1()
         {
             PrintLine();
-            LoadPOSDll.POS_SetLineSpacing(85);
+            SendData2USB(PrinterCmdUtils.printNextLine(2));
             SendData2USB("特别声明:本单有效期一个月\r\n");
             SendData2USB(enddata);
             SendData2USB(" \r\n");

@@ -44,7 +44,7 @@ namespace Printer.Framework.Printer.ServiceTickPrinter
                         PrintTable(p);
                         SendData2USB("\r\n");
                         SendData2USB(PrinterCmdUtils.lineSpace(60));
-                        LoadPOSDll.POS_FeedLines(2);
+                        SendData2USB(PrinterCmdUtils.printNextLine(2));
                         SendData2USB(PrinterCmdUtils.feedPaperCutAll());
                     }
                     NewUsb.CloseUSBPort();
