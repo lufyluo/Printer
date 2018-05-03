@@ -10,7 +10,7 @@ namespace Printer.Framework.Config
 {
     public class ConfigManager
     {
-        public static readonly string File = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yulaila.exe");
+        public static readonly string File = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "yunlaila.exe");
 
         public static string GetSetting(string strKey)
         {
