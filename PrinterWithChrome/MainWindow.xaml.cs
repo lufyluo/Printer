@@ -4,10 +4,9 @@ using System.Windows;
 using System.Windows.Input;
 using CefSharp;
 using CefSharp.Wpf;
+using Printer.Core.Printer.ServiceTickPrinter;
 using Printer.Framework.Config;
 using Printer.Framework.Log;
-using Printer.Framework.Printer;
-using Printer.Framework.Printer.ServiceTickPrinter;
 using Printer.Framework.VersionCheck;
 using PrinterWithChrome.Controls;
 

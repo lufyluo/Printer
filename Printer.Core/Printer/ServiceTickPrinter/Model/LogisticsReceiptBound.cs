@@ -1,0 +1,13 @@
+﻿namespace Printer.Core.Printer.ServiceTickPrinter.Model
+{
+    public class LogisticsReceiptBound:TransportReceiptBound
+    {
+        public double Pay { get; set; }
+        public double PayBack { get; set; }
+        /// <summary>
+        /// 到付应收
+        /// </summary>
+        public double FinalPay { get; set; }
+        public string StatementList { get; set; }
+    }
+}
