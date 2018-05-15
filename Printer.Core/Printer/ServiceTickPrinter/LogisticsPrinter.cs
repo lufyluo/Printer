@@ -19,7 +19,7 @@ namespace Printer.Core.Printer.ServiceTickPrinter
         {
             logisticsReceiptBound = JsonConvert.DeserializeObject<LogisticsReceiptBound>(value);
         }
-      
+
         public string print(string value)
         {
             try
@@ -66,21 +66,21 @@ namespace Printer.Core.Printer.ServiceTickPrinter
                     Desc = e.Message
                 });
             }
-           
+
         }
 
         private void MainPrint(string type)
         {
             SendData2USB(Core.Printer.PrinterCmdUtils.reset());
-            PrintTitle(logisticsReceiptBound.Title+$"签收单({type})");
+            PrintTitle(logisticsReceiptBound.Title + $"签收单({type})");
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(20));
             SendData2USB(Core.Printer.PrinterCmdUtils.printNextLine(1));
-            PrintBar(logisticsReceiptBound.BarCode,false);
+            PrintBar(logisticsReceiptBound.BarCode, false);
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(20));
             SendData2USB(Core.Printer.PrinterCmdUtils.printNextLine(1));
             //SendData2USB(enddata);
             PrintHead();
-            PrintBody();
+            PrintBody(type);
         }
 
         private void PrintHead()
@@ -91,13 +91,13 @@ namespace Printer.Core.Printer.ServiceTickPrinter
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(20));
             SendData2USB(Core.Printer.PrinterCmdUtils.printNextLine(1));
             SendData2USB(Core.Printer.PrinterCmdUtils.resetLineHeight());
-            SendData2USB(StringHelper.GetAdjustedString((string) $"发站:{logisticsReceiptBound.StartStation}", maxLengthString));
+            SendData2USB(StringHelper.GetAdjustedString((string)$"发站:{logisticsReceiptBound.StartStation}", maxLengthString));
             PrintTitleSp(2);
             SendData2USB($"电话:{logisticsReceiptBound.Mobile}");
             SendData2USB(enddata);
             SendData2USB($"到站:");
             SendData2USB(Core.Printer.PrinterCmdUtils.setBold(1));
-            SendData2USB(StringHelper.GetAdjustedString((string) $"{logisticsReceiptBound.Terminus}", exceptLent));
+            SendData2USB(StringHelper.GetAdjustedString((string)$"{logisticsReceiptBound.Terminus}", exceptLent));
             SendData2USB(Core.Printer.PrinterCmdUtils.setBold(0));
             PrintTitleSp(2);
             SendData2USB($"电话:");
@@ -113,31 +113,36 @@ namespace Printer.Core.Printer.ServiceTickPrinter
             SendData2USB(enddata);
             PrintLine();
         }
-        private void PrintBody()
+        private void PrintBody(string type)
         {
             var maxLengthString = $"托运时间:{logisticsReceiptBound.ConsignmentDate.ToString("yyyy-MM-dd")}";
             PrintTitle($"收货:{logisticsReceiptBound.Reciever} {logisticsReceiptBound.RecieverPhone.ToString()} \r\n", false);
-            SendData2USB($"{StringHelper.GetAdjustedString(("发货人:"+logisticsReceiptBound.Sender), maxLengthString)}");
+            SendData2USB($"{StringHelper.GetAdjustedString(("发货人:" + logisticsReceiptBound.Sender), maxLengthString)}");
             //PrintTitleSp(2);
             SendData2USB($"电话:{logisticsReceiptBound.SenderPhone}");
             SendData2USB(enddata);
             PrintCommonTable(logisticsReceiptBound.GoodsDetails);
             NextLine();
             PrintLine();
-            SendData2USB($"送货费:{StringHelper.GetAdjustedStringByCols(logisticsReceiptBound.DeliveryFee.ToString(), (int) 12)}");
+
+            SendData2USB($"送货费:{StringHelper.GetAdjustedStringByCols(logisticsReceiptBound.DeliveryFee.ToString(), (int)12)}");
             //PrintTitleSp(12);
-            SendData2USB($"现付:{StringHelper.GetAdjustedStringByCols(logisticsReceiptBound.Pay.ToString(), (int) 12)}");
+            SendData2USB($"现付:{StringHelper.GetAdjustedStringByCols(logisticsReceiptBound.Pay.ToString(), (int)12)}");
             //PrintTitleSp(12);
             SendData2USB($"回付:{logisticsReceiptBound.PayBack} \r\n");
             SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
-            SendData2USB($"开票备注:{logisticsReceiptBound.BillingStaffRemarks} \r\n");
-            SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
+            if (type == "存根联")
+            {
+                SendData2USB($"备注:{logisticsReceiptBound.BillingStaffRemarks} \r\n");
+                SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
+            }
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(25));
             PrintTitle($"提付:{logisticsReceiptBound.TakePay} \r\n", false);
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(25));
-            PrintTitle($"代收款:{logisticsReceiptBound.Collection} \r\n",false);
+            PrintTitle($"代收款:{logisticsReceiptBound.Collection} \r\n", false);
             PrintTitle($"到付应收:{logisticsReceiptBound.FinalPay}", false);
-           
+            if (!string.IsNullOrEmpty(logisticsReceiptBound.BillingStaffRemarks) && type == "客户联")
+                PrintTitle($"备注:{logisticsReceiptBound.BillingStaffRemarks} \r\n", false);
         }
 
         private void SpecialState1()

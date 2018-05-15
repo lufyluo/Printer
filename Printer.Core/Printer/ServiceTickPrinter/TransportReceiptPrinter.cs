@@ -145,14 +145,17 @@ namespace Printer.Core.Printer.ServiceTickPrinter
             if (transportReceipt.Collection != "0")
             {
                 SendData2USB($"打款账户:{transportReceipt.ShipperBankName}/{transportReceipt.ShipperBankCardAccount} \r\n");
-                SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(18));
+                //SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(18));
+                SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
             }
             SendData2USB($"开票人:{transportReceipt.BillingStaff} \r\n");
             SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
             SendData2USB($"验证码:{transportReceipt.PrintCheckCode} \r\n");
             SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(24));
-            SendData2USB($"开票人备注:{transportReceipt.BillingStaffRemarks} \r\n");
+            if (!string.IsNullOrEmpty(transportReceipt.BillingStaffRemarks))
+                PrintTitle($"备注:{transportReceipt.BillingStaffRemarks}",false);
+            //SendData2USB($"开票人备注:{transportReceipt.BillingStaffRemarks} \r\n");
             SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
             PrintLine();
             SendData2USB(Core.Printer.PrinterCmdUtils.setLineHeight(18));
