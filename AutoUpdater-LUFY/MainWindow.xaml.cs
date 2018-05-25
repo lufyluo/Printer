@@ -68,7 +68,7 @@ namespace AutoUpdater_LUFY
 
         private void CompletedWork(object sender, RunWorkerCompletedEventArgs e)
         {
-            writeLog("更新成功！");
+            writeLog("更新结束！");
             this.Close();
         }
 
