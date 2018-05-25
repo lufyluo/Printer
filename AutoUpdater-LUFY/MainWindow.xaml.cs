@@ -35,7 +35,7 @@ namespace AutoUpdater_LUFY
         //下载文件存放全路径  
         private string filepath = "";
         //更新后打开的程序名  
-        string startexe = "PrinterWithChrome.exe";
+        string startexe = "yunlaila.exe";
         //新版本号  
         string version = "20180327002";
         private BackgroundWorker m_BackgroundWorker;// 申明后台对象
