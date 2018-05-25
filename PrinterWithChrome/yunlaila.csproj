@@ -181,6 +181,10 @@
       <Project>{2edca018-a9c9-4417-b5a1-e3a4a27fe7c6}</Project>
       <Name>AutoUpdater-LUFY</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Printer.Core\Printer.Core.csproj">
+      <Project>{ad55de7b-f2b3-4839-904f-cbfddf14dd4e}</Project>
+      <Name>Printer.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Printer.Framework\Printer.Framework.csproj">
       <Project>{c27cb28d-8e4f-4336-a6f9-8e7e0db8f71e}</Project>
       <Name>Printer.Framework</Name>

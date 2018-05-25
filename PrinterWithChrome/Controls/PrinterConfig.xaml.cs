@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Printer.Core.Printer;
+using Printer.Core.Printer.Model;
 using Printer.Framework.Config;
 using Printer.Framework.Printer;
-using Printer.Framework.Printer.Model;
 
 namespace PrinterWithChrome.Controls
 {
@@ -68,11 +59,11 @@ namespace PrinterWithChrome.Controls
 
             PrinterBase.SetPrinters();
 
-            var stickPrinterPath = GetPrinterUsbPath(stickPrinterSelectedValue);
-            ConfigManager.UpdateSetting(nameof(StickPrinter)+"Path", stickPrinterPath);
+            var stickPrinterPath = GetPrinterUsbPath(stickPrinterSelectedValue, StickPrinter);
+            ConfigManager.UpdateSetting(nameof(StickPrinter) + "Path", stickPrinterPath);
 
-            
-            var receiptPrinterPath = GetPrinterUsbPath(receiptPrinterSelectedValue);
+
+            var receiptPrinterPath = GetPrinterUsbPath(receiptPrinterSelectedValue, ReceiptPrinter);
             ConfigManager.UpdateSetting(nameof(ReceiptPrinter) + "Path", receiptPrinterPath);
             this.Visibility = Visibility.Hidden;
         }
@@ -83,16 +74,13 @@ namespace PrinterWithChrome.Controls
             return printerConfig?.Id.ToString() ?? "1";
         }
 
-        private string GetPrinterUsbPath(string port)
+        private string GetPrinterUsbPath(string port,ComboBox printerBox)
         {
             if (string.IsNullOrEmpty(port)|| port=="-1")
             {
                 return "";
             }
-            var index = int.Parse(port) >= PrinterBase.printerPaths.Count
-                ? PrinterBase.printerPaths.Count - 1
-                : int.Parse(port);
-            return PrinterBase.printerPaths[index].Path;
+            return printerBox.SelectedValue?.ToString() ?? "";
         }
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {

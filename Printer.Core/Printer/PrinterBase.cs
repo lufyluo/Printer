@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Printer.Core.Printer.Model;
+using Printer.Core.Printer.ServiceTickPrinter.Model;
 using Printer.Framework.Config;
-using Printer.Framework.Printer.Model;
-using Printer.Framework.Printer.ServiceTickPrinter.Model;
 
 namespace Printer.Framework.Printer
 {
@@ -33,8 +33,8 @@ namespace Printer.Framework.Printer
         /// </summary>
         protected void NextLine()
         {
-            SendData2USB(PrinterCmdUtils.lineSpace(51));
-            SendData2USB(PrinterCmdUtils.nextLine(1));
+            SendData2USB(Core.Printer.PrinterCmdUtils.lineSpace(51));
+            SendData2USB(Core.Printer.PrinterCmdUtils.nextLine(1));
         }
         /// <summary>
         /// 打印标题
@@ -44,13 +44,13 @@ namespace Printer.Framework.Printer
         {
             if (isCenter)
             {
-                SendData2USB(PrinterCmdUtils.alignCenter());
+                SendData2USB(Core.Printer.PrinterCmdUtils.alignCenter());
             }
-            SendData2USB(PrinterCmdUtils.setBold(1));
+            SendData2USB(Core.Printer.PrinterCmdUtils.setBold(1));
             SendData2USB(_fontBold);
             SendData2USB(tile);
-            SendData2USB(PrinterCmdUtils.printNextLine(1));
-            SendData2USB(PrinterCmdUtils.reset());
+            SendData2USB(Core.Printer.PrinterCmdUtils.printNextLine(1));
+            SendData2USB(Core.Printer.PrinterCmdUtils.reset());
             //SendData2USB(PrinterCmdUtils.nextLine(1));
             //if (isCenter) SendData2USB(enddata);
         }
@@ -76,7 +76,7 @@ namespace Printer.Framework.Printer
         protected void PrintBar(string code, bool isNeedCodeShown = true)
         {
             byte barCodeLength = (byte)(code.Length+2);
-            SendData2USB(PrinterCmdUtils.alignCenter());
+            SendData2USB(Core.Printer.PrinterCmdUtils.alignCenter());
             SendData2USB(new byte[] { 29, 104, 100 });//h
             SendData2USB(new byte[] { 29, 119, 2});//w
             if (isNeedCodeShown)
@@ -90,7 +90,7 @@ namespace Printer.Framework.Printer
             var byteArr = new byte[n];
             for (int i = 0; i < byteArr.Length; i++)
             {
-                byteArr[i] = PrinterCmdUtils.SP;
+                byteArr[i] = Core.Printer.PrinterCmdUtils.SP;
             }
             SendData2USB(byteArr);
         }
